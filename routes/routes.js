@@ -6,11 +6,9 @@ const router = express.Router();
 
 router.get("/getDoctores", doctores.doctor);
 router.get("/especialidad", reservas.especialidad)
-router.get("/disponibilidad", reservas.disponibilidad)
+router.get("/disponibilidad/:doctorId", reservas.disponibilidad)
 router.post("/reservaCita", reservas.reservaCita)
-
-
-
+ 
 
 
 module.exports = router;

@@ -24,7 +24,7 @@ model especialidad {
   especialidad   String
 
   doctorRelation doctor        @relation(fields: [doctorId], references: [id])
-  reservaCitas  reservaCitas[]
+  reservaCitas   reservaCitas[]
 }
 
 model reservaCitas {
