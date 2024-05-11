@@ -49,6 +49,8 @@ model disponibilidad {
 model paciente {
   id             Int            @id @default(autoincrement())
   nombre         String
+  telefono       String
+  email          String
 
   reservaCitas   reservaCitas[]
 }

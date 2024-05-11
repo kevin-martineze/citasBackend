@@ -1,20 +1,26 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-// Al seleccionar [especialidad] mostrar (doctor)
-exports.especialidad = async (req, res) => {
+exports.especialidades = async (req, res) => {
   try {
-    const especialidad = await prisma.especialidad.findMany({
+    const especialidades = await prisma.especialidad.findMany();
+    res.json(especialidades);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Hubo un error" });
+  }
+};
+
+// Al seleccionar [especialidad] mostrar (doctor)
+exports.especialidadDoctores = async (req, res) => {
+  try {
+    const doctores = await prisma.especialidad.findMany({
       include: {
-        doctorRelation: {
-          //   include: {
-          //     disponibilidad: true,
-          //   },
-        },
+        doctorRelation: true,
       },
     });
 
-    res.json(especialidad);
+    res.json(doctores);
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Hubo un error" });
@@ -47,12 +53,20 @@ exports.disponibilidad = async (req, res) => {
 };
 
 exports.reservaCita = async (req, res) => {
-  const { doctorId, pacienteId, especialidadId } = req.body;
+  const { nombre, telefono, email, doctorId, especialidadId } =
+    req.body;
   try {
+    const paciente = await prisma.paciente.findUnique({
+      data: {
+        nombre,
+        telefono,
+        email,
+      },
+    });
     const reserva = await prisma.reservaCitas.create({
       data: {
         doctorId,
-        pacienteId,
+        pacienteId: paciente.id,
         especialidadId,
       },
     });
