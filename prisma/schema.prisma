@@ -15,23 +15,7 @@ model doctor {
 
   disponibilidad          disponibilidad[]
   especialidad            especialidad[]
-  citas                   citas[]
-}
-
-model disponibilidad {
-  id             Int           @id @default(autoincrement())
-  doctorId       Int
-  horario        DateTime
-
-  doctorRelation doctor        @relation(fields: [doctorId], references: [id])
-}
-
-model citas {
-  id             Int           @id @default(autoincrement())
-  doctorId       Int   
-  tipo           String 
-
-  doctorRelation doctor        @relation(fields: [doctorId], references: [id])
+  reservaCitas            reservaCitas[]
 }
 
 model especialidad {
@@ -40,7 +24,32 @@ model especialidad {
   especialidad   String
 
   doctorRelation doctor        @relation(fields: [doctorId], references: [id])
+  reservaCitas  reservaCitas[]
 }
 
+model reservaCitas {
+  id             Int           @id @default(autoincrement())
+  doctorId       Int   
+  pacienteId     Int
+  especialidadId Int
 
+  doctorRelation doctor        @relation(fields: [doctorId], references: [id])
+  pacienteRelation paciente     @relation(fields: [pacienteId], references: [id])
+  especialidadRelation especialidad @relation(fields: [especialidadId], references: [id])
+}
+
+model disponibilidad {
+  id             Int           @id @default(autoincrement())
+  doctorId       Int
+  horario        DateTime      @default(now())
+
+  doctorRelation doctor        @relation(fields: [doctorId], references: [id])
+}
+
+model paciente {
+  id             Int            @id @default(autoincrement())
+  nombre         String
+
+  reservaCitas   reservaCitas[]
+}
 
